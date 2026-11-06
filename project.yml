@@ -1,0 +1,65 @@
+# Source of truth for the Xcode project. Run `xcodegen` after editing,
+# or after adding or removing files. SlimCalendar.xcodeproj is generated.
+name: SlimCalendar
+
+options:
+  bundleIdPrefix: com.vytas
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Manual
+    CODE_SIGN_IDENTITY: "-"
+    DEVELOPMENT_TEAM: ""
+    SWIFT_STRICT_CONCURRENCY: complete
+    DEAD_CODE_STRIPPING: YES
+
+targets:
+  SlimCalendar:
+    type: application
+    platform: macOS
+    sources:
+      - SlimCalendar
+      - path: AppIcon.icon
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_NAME: Slim Calendar
+        EXECUTABLE_NAME: SlimCalendar
+        PRODUCT_BUNDLE_IDENTIFIER: com.vytas.slimcalendar
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Slim Calendar
+        INFOPLIST_KEY_LSUIElement: YES
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.productivity
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ENABLE_APP_SANDBOX: YES
+        ENABLE_HARDENED_RUNTIME: YES
+
+  SlimCalendarTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - SlimCalendarTests
+    dependencies:
+      - target: SlimCalendar
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.vytas.slimcalendar.tests
+        GENERATE_INFOPLIST_FILE: YES
+        # The app's product name has a space, so the default host path is wrong.
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Slim Calendar.app/Contents/MacOS/SlimCalendar"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+
+schemes:
+  SlimCalendar:
+    build:
+      targets:
+        SlimCalendar: all
+    test:
+      targets:
+        - SlimCalendarTests
